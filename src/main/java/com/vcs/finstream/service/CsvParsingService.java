@@ -10,6 +10,7 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.math.BigDecimal;
+import java.math.RoundingMode;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -45,7 +46,8 @@ public class CsvParsingService {
         }
 
         String transactionId = parts[0].trim();
-        BigDecimal amount = new BigDecimal(parts[1].trim());
+        BigDecimal amount = new BigDecimal(parts[1].trim())
+                .setScale(2, RoundingMode.HALF_UP);
         TransactionType type = TransactionType.valueOf(parts[2].trim().toUpperCase());
         Category category = Category.valueOf(parts[3].trim().toUpperCase());
         LocalDateTime timestamp = LocalDateTime.parse(parts[4].trim());

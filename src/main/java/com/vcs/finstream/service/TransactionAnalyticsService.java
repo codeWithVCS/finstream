@@ -10,9 +10,9 @@ import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.time.YearMonth;
 import java.util.Comparator;
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Service
@@ -28,16 +28,19 @@ public class TransactionAnalyticsService {
         BigDecimal totalIncome = transactions.stream()
                 .filter(t -> t.getType() == TransactionType.CREDIT)
                 .map(Transaction::getAmount)
-                .reduce(BigDecimal.ZERO, BigDecimal::add);
+                .reduce(BigDecimal.ZERO, BigDecimal::add)
+                .setScale(2, RoundingMode.HALF_UP);
 
         //TOTAL EXPENSE
         BigDecimal totalExpense = transactions.stream()
                 .filter(t -> t.getType() == TransactionType.DEBIT)
                 .map(Transaction::getAmount)
-                .reduce(BigDecimal.ZERO, BigDecimal::add);
+                .reduce(BigDecimal.ZERO, BigDecimal::add)
+                .setScale(2, RoundingMode.HALF_UP);
 
         //NET BALANCE
-        BigDecimal netBalance = totalIncome.subtract(totalExpense);
+        BigDecimal netBalance = totalIncome.subtract(totalExpense)
+                .setScale(2, RoundingMode.HALF_UP);
 
         //TOTAL TRANSACTIONS
         long totalTransactions = transactions.size();
@@ -48,12 +51,9 @@ public class TransactionAnalyticsService {
                 .reduce(BigDecimal.ZERO, BigDecimal::add);
 
         BigDecimal averageTransaction = totalTransactions == 0
-                ? BigDecimal.ZERO
-                : totalAmount.divide(
-                BigDecimal.valueOf(totalTransactions),
-                2,
-                RoundingMode.HALF_UP
-        );
+                ? BigDecimal.ZERO.setScale(2, RoundingMode.HALF_UP)
+                : totalAmount
+                .divide(BigDecimal.valueOf(totalTransactions), 2, RoundingMode.HALF_UP);
 
         //CATEGORY BREAKDOWN (DEBIT ONLY)
         Map<Category, BigDecimal> categoryBreakdown = transactions.stream()
@@ -67,16 +67,27 @@ public class TransactionAnalyticsService {
                         )
                 ));
 
+        // Sort category breakdown descending & normalize scale
+        Map<Category, BigDecimal> sortedCategoryBreakdown =
+                categoryBreakdown.entrySet()
+                        .stream()
+                        .sorted(Map.Entry.<Category, BigDecimal>comparingByValue().reversed())
+                        .collect(Collectors.toMap(
+                                Map.Entry::getKey,
+                                e -> e.getValue().setScale(2, RoundingMode.HALF_UP),
+                                (a, b) -> a,
+                                LinkedHashMap::new
+                        ));
+
         //TOP SPENDING CATEGORY
-        Optional<Map.Entry<Category, BigDecimal>> topCategoryEntry =
-                categoryBreakdown.entrySet().stream()
-                        .max(Map.Entry.comparingByValue());
+        Category topSpendingCategory = sortedCategoryBreakdown.keySet()
+                .stream()
+                .findFirst()
+                .orElse(null);
 
-        Category topSpendingCategory =
-                topCategoryEntry.map(Map.Entry::getKey).orElse(null);
-
-        //HIGHEST TRANSACTION
+        //HIGHEST EXPENSE TRANSACTION (DEBIT ONLY)
         Transaction highestTransaction = transactions.stream()
+                .filter(t -> t.getType() == TransactionType.DEBIT)
                 .max(Comparator.comparing(Transaction::getAmount))
                 .orElse(null);
 
@@ -84,12 +95,21 @@ public class TransactionAnalyticsService {
         Map<String, BigDecimal> monthlyExpenseTrend = transactions.stream()
                 .filter(t -> t.getType() == TransactionType.DEBIT)
                 .collect(Collectors.groupingBy(
-                        t -> YearMonth.from(t.getTimestamp()).toString(),
+                        t -> YearMonth.from(t.getTimestamp()),
                         Collectors.reducing(
                                 BigDecimal.ZERO,
                                 Transaction::getAmount,
                                 BigDecimal::add
                         )
+                ))
+                .entrySet()
+                .stream()
+                .sorted(Map.Entry.comparingByKey()) // chronological order
+                .collect(Collectors.toMap(
+                        e -> e.getKey().toString(),
+                        e -> e.getValue().setScale(2, RoundingMode.HALF_UP),
+                        (a, b) -> a,
+                        LinkedHashMap::new
                 ));
 
         return new AnalyticsResponse(
@@ -98,7 +118,7 @@ public class TransactionAnalyticsService {
                 netBalance,
                 totalTransactions,
                 averageTransaction,
-                categoryBreakdown,
+                sortedCategoryBreakdown,
                 topSpendingCategory,
                 highestTransaction,
                 monthlyExpenseTrend
