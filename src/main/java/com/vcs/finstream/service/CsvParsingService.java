@@ -33,7 +33,7 @@ public class CsvParsingService {
                     .collect(Collectors.toList());
 
         } catch (IOException e) {
-            throw new RuntimeException("Error reading CSV file", e);
+            throw new IllegalArgumentException("Transaction list is empty");
         }
     }
 

@@ -21,7 +21,7 @@ public class TransactionAnalyticsService {
     public AnalyticsResponse analyze(List<Transaction> transactions) {
 
         if (transactions == null || transactions.isEmpty()) {
-            throw new RuntimeException("Transaction list is empty");
+            throw new IllegalArgumentException("Transaction list is empty");
         }
 
         //TOTAL INCOME
