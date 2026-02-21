@@ -1,0 +1,277 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+html, body {
+    height: 100%;
+    overflow: hidden;
+    font-family: 'Segoe UI', sans-serif;
+    background: linear-gradient(135deg, #0f2027, #203a43, #2c5364);
+    color: white;
+}
+
+/* APP LAYOUT */
+
+.app-container {
+    height: 100vh;
+    display: flex;
+    flex-direction: column;
+}
+
+/* HEADER */
+
+.header {
+    text-align: center;
+    padding-top: 30px;
+    transition: all 0.4s ease;
+}
+
+.header.large h1 {
+    font-size: 65px;
+}
+
+.header.small h1 {
+    font-size: 38px;
+}
+
+.header.large p {
+    font-size: 20px;
+}
+
+.header.small p {
+    font-size: 16px;
+}
+
+.header h1 {
+    font-weight: 800;
+    background: linear-gradient(45deg, #00f2fe, #4facfe);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+}
+
+.developer-info {
+    margin-top: 10px;
+    font-size: 13px;
+}
+
+.developer-info a {
+    margin-left: 8px;
+    color: #4facfe;
+    text-decoration: none;
+}
+
+/* MAIN CONTENT — FIXED CENTERING */
+
+.main-content {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 20px;
+}
+
+/* Upload Card */
+
+.upload-card {
+    width: 520px;
+    padding: 30px;
+    border-radius: 20px;
+    background: rgba(255,255,255,0.12);
+    text-align: center;
+}
+
+.upload-card input {
+    width: 100%;
+    padding: 12px;
+    margin-bottom: 15px;
+}
+
+.upload-card button {
+    width: 100%;
+    padding: 12px;
+    border-radius: 25px;
+    border: none;
+    font-weight: bold;
+    background: linear-gradient(45deg, #00c6ff, #0072ff);
+    color: white;
+    cursor: pointer;
+}
+
+/* Format Card */
+
+.format-card {
+    width: 600px;
+    padding: 20px;
+    border-radius: 20px;
+    background: rgba(255,255,255,0.08);
+    text-align: center;
+}
+
+.format-card table {
+    width: 100%;
+    margin-top: 10px;
+    border-collapse: collapse;
+}
+
+.format-card th,
+.format-card td {
+    border: 1px solid rgba(255,255,255,0.3);
+    padding: 8px;
+    font-size: 13px;
+}
+
+/* Description */
+
+.description {
+    width: 750px;
+    text-align: center;
+    font-size: 16px;
+    line-height: 1.6;
+}
+
+/* DASHBOARD */
+
+.dashboard {
+    flex: 1;
+    display: flex;
+    align-items: center;
+    justify-content: space-evenly;
+    padding: 0 80px;
+}
+
+/* LEFT PANEL — 2x2 GRID */
+
+.left-panel {
+    width: 420px;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 30px;
+}
+
+.kpi-circle {
+    width: 170px;
+    height: 170px;
+    border-radius: 50%;
+    background: linear-gradient(45deg, #00c6ff, #0072ff);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    margin: auto;
+}
+
+.kpi-circle span {
+    font-size: 18px;
+    font-weight: bold;
+}
+
+.kpi-circle label {
+    margin-top: 6px;
+    font-size: 13px;
+}
+
+/* CONNECTOR */
+
+.vertical-line {
+    width: 2px;
+    height: 60%;
+    background: linear-gradient(to bottom, transparent, #4facfe, transparent);
+}
+
+/* RIGHT PANEL */
+
+.right-panel {
+    width: 45%;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-evenly;
+}
+
+.secondary-grid {
+    display: flex;
+    justify-content: space-between;
+}
+
+.info-box {
+    background: rgba(255,255,255,0.12);
+    padding: 20px;
+    border-radius: 18px;
+    width: 48%;
+    text-align: center;
+}
+
+.lists-section {
+    display: flex;
+    justify-content: space-between;
+}
+
+.lists-section div {
+    width: 48%;
+}
+
+.lists-section ul {
+    margin-top: 10px;
+    font-size: 14px;
+}
+
+.hidden {
+    display: none;
+}
+
+.error {
+    color: #ff4d6d;
+}
+
+/* FILE UPLOAD BUTTON */
+
+.file-upload {
+    display: inline-block;
+    padding: 10px 20px;
+    border-radius: 25px;
+    background: rgba(255,255,255,0.2);
+    cursor: pointer;
+    margin-bottom: 15px;
+    transition: 0.3s ease;
+}
+
+.file-upload:hover {
+    background: rgba(255,255,255,0.35);
+}
+
+.selected-file {
+    margin-top: 10px;
+    font-size: 14px;
+    opacity: 0.85;
+}
+
+/* LOADING ANIMATION */
+
+.loading {
+    margin-top: 20px;
+    font-size: 18px;
+    font-weight: 600;
+    text-align: center;
+    opacity: 0.9;
+    animation: fadeIn 0.4s ease-in-out;
+}
+
+.dots::after {
+    content: '';
+    animation: dots 1.5s steps(4, end) infinite;
+}
+
+@keyframes dots {
+    0% { content: ''; }
+    25% { content: '.'; }
+    50% { content: '..'; }
+    75% { content: '...'; }
+    100% { content: ''; }
+}
+
+@keyframes fadeIn {
+    from { opacity: 0; }
+    to { opacity: 1; }
+}

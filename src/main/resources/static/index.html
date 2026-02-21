@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>FinStream</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<div class="app-container">
+
+    <!-- HEADER -->
+    <header class="header large" id="headerSection">
+        <h1 id="appTitle">FinStream</h1>
+        <p id="tagline">Java Stream-Powered Financial Intelligence</p>
+
+        <div class="developer-info">
+            <span>Developed by <strong>Chandra Sekhar Vipparla</strong></span>
+            <a href="https://www.linkedin.com/in/chandra-sekhar-vipparla/" target="_blank">LinkedIn</a>
+            <a href="https://github.com/codeWithVCS" target="_blank">GitHub</a>
+        </div>
+    </header>
+
+    <!-- MAIN CONTENT -->
+    <section class="main-content" id="mainContent">
+
+        <div class="upload-card">
+            <h2>Upload Transactions Dataset</h2>
+
+            <label class="file-upload">
+                <input type="file" id="fileInput" accept=".csv" hidden>
+                Choose CSV File
+            </label>
+
+            <button onclick="uploadFile()">Analyze Dataset</button>
+
+            <p id="fileName" class="selected-file"></p>
+            <p id="errorMessage" class="error"></p>
+        </div>
+
+        <!-- LOADING ANIMATION -->
+        <div id="loading" class="loading hidden">
+            Processing Dataset<span class="dots"></span>
+        </div>
+
+        <div class="format-card">
+            <h3>Expected CSV Structure</h3>
+            <table>
+                <thead>
+                <tr>
+                    <th>transactionId</th>
+                    <th>amount</th>
+                    <th>type</th>
+                    <th>category</th>
+                    <th>timestamp</th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr>
+                    <td>TX1</td>
+                    <td>2500.00</td>
+                    <td>DEBIT</td>
+                    <td>FOOD</td>
+                    <td>2026-01-10T10:15:30</td>
+                </tr>
+                </tbody>
+            </table>
+            <p class="allowed">Allowed File Type: .csv</p>
+        </div>
+
+        <div class="description">
+            FinStream is a high-performance financial analytics engine built using Spring Boot and Java Streams.
+            It processes transaction datasets entirely in-memory and generates structured insights including income patterns,
+            expense distribution, top spending categories, highest transactions, and monthly trends —
+            powered by functional programming principles.
+        </div>
+
+    </section>
+
+    <!-- DASHBOARD -->
+    <section id="dashboard" class="dashboard hidden">
+
+        <div class="left-panel">
+            <div class="kpi-circle">
+                <span id="totalIncome"></span>
+                <label>Total Income</label>
+            </div>
+
+            <div class="kpi-circle">
+                <span id="totalExpense"></span>
+                <label>Total Expense</label>
+            </div>
+
+            <div class="kpi-circle">
+                <span id="netBalance"></span>
+                <label>Net Balance</label>
+            </div>
+
+            <div class="kpi-circle">
+                <span id="averageTransaction"></span>
+                <label>Average Transaction</label>
+            </div>
+        </div>
+
+        <div class="vertical-line"></div>
+
+        <div class="right-panel">
+            <div class="secondary-grid">
+                <div class="info-box">
+                    <h4>Top Category</h4>
+                    <p id="topCategory"></p>
+                </div>
+
+                <div class="info-box">
+                    <h4>Highest Transaction</h4>
+                    <p id="highestExpense"></p>
+                </div>
+            </div>
+
+            <div class="lists-section">
+                <div>
+                    <h4>Category Breakdown</h4>
+                    <ul id="categoryBreakdown"></ul>
+                </div>
+
+                <div>
+                    <h4>Monthly Trend</h4>
+                    <ul id="monthlyTrend"></ul>
+                </div>
+            </div>
+        </div>
+
+    </section>
+
+</div>
+
+<script src="script.js"></script>
+</body>
+</html>
