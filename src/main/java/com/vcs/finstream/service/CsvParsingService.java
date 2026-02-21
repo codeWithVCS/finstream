@@ -40,20 +40,18 @@ public class CsvParsingService {
 
         String[] parts = line.split(",");
 
-        if (parts.length != 6) {
+        if (parts.length != 5) {
             throw new RuntimeException("Invalid CSV format: " + line);
         }
 
         String transactionId = parts[0].trim();
-        String userId = parts[1].trim();
-        BigDecimal amount = new BigDecimal(parts[2].trim());
-        TransactionType type = TransactionType.valueOf(parts[3].trim().toUpperCase());
-        Category category = Category.valueOf(parts[4].trim().toUpperCase());
-        LocalDateTime timestamp = LocalDateTime.parse(parts[5].trim());
+        BigDecimal amount = new BigDecimal(parts[1].trim());
+        TransactionType type = TransactionType.valueOf(parts[2].trim().toUpperCase());
+        Category category = Category.valueOf(parts[3].trim().toUpperCase());
+        LocalDateTime timestamp = LocalDateTime.parse(parts[4].trim());
 
         return new Transaction(
                 transactionId,
-                userId,
                 amount,
                 type,
                 category,

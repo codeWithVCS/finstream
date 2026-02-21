@@ -11,7 +11,6 @@ import java.time.LocalDateTime;
 public class Transaction {
 
     private final String transactionId;
-    private final String userId;
     private final BigDecimal amount;
     private final TransactionType type;
     private final Category category;
